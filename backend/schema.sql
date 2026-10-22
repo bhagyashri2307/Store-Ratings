@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS storedb;
+USE storedb;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(60) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  address VARCHAR(400),
+  role ENUM('admin','user','owner') NOT NULL
+);
+CREATE TABLE IF NOT EXISTS stores (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(60) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  address VARCHAR(400),
+  owner_id INT NULL,
+  FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+CREATE TABLE IF NOT EXISTS ratings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  store_id INT NOT NULL,
+  rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  UNIQUE (user_id, store_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (store_id) REFERENCES stores(id)
+);
